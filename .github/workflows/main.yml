@@ -32,24 +32,29 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: pmd-report.sarif
+      - name: Upload SARIF Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: pmd-report.sarif
+          path: pmd-report.sarif
   import:
-    name: Import SARIF results to Conviso Platform 
-    needs: pmd-scan
+    name: Conviso Findings Importation
+    needs: zap
     runs-on: ubuntu-20.04
     container:
-      image: convisoappsec/flowcli:latest
+      image: convisoappsec/conviso-flowcli
       env:
-        FLOW_API_KEY: ${{secrets.CONVISO_API_KEY}}
-        FLOW_PROJECT_CODE: ${{secrets.CONVISO_PROJECT_CODE}}
+        FLOW_API_KEY: ${{ secrets.CONVISO_API_KEY }}
+        FLOW_API_URL: ${{ secrets.HOMOLOGA_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download result from pmd scan
+      - name: Download result from previous scan
         uses: actions/download-artifact@v3
         with:
-          name: pmd-report.sarif
+          name: zap_report.sarif
 
       - name: SARIF Importation
         run: |
-          conviso findings import-sarif --input-file pmd-report.sarif
+          conviso findings import-sarif --input-file ./zap_report.sarif
