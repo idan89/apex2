@@ -61,4 +61,4 @@ jobs:
       - name: SARIF Importation
         run: |
            cat pmd-report.sarif
-           conviso findings import-sarif --input-file ./zap_report.sarif
+           conviso findings import-sarif --input-file pmd-report.sarif
