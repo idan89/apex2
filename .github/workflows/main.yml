@@ -41,22 +41,22 @@ jobs:
         run: |
            cat pmd-report.sarif
   import:
-    name: Conviso Findings Importation
+    name: Import SARIF results to Conviso Platform 
     needs: pmd-scan
     runs-on: ubuntu-20.04
     container:
-      image: convisoappsec/conviso-flowcli
+      image: convisoappsec/flowcli:latest
       env:
-        FLOW_API_KEY: ${{ secrets.CONVISO_API_KEY }}
-        FLOW_API_URL: ${{ secrets.HOMOLOGA_URL }}
+        FLOW_API_KEY: ${{secrets.CONVISO_API_KEY}}
+        FLOW_PROJECT_CODE: ${{secrets.CONVISO_PROJECT_CODE}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Download result from previous scan
+      - name: Download result from pmd scan
         uses: actions/download-artifact@v3
         with:
-          name: zap_report.sarif
+          name: pmd-report.sarif
 
       - name: SARIF Importation
         run: |
