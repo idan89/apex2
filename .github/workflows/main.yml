@@ -1,4 +1,5 @@
 name: PMD Static Code Analysis + Conviso Platform
+
 on:
   pull_request:
     branches:
