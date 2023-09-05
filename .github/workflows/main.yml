@@ -1,5 +1,4 @@
 name: PMD Static Code Analysis + Conviso Platform
-
 on:
   pull_request:
     branches:
@@ -48,6 +47,7 @@ jobs:
     container:
       image: convisoappsec/flowcli:latest
       env:
+        FLOW_API_URL : "https://homologa.convisoappsec.com/"
         FLOW_API_KEY: ${{secrets.CONVISO_API_KEY}}
         FLOW_PROJECT_CODE: ${{secrets.CONVISO_PROJECT_CODE}}
     steps:
