@@ -37,9 +37,12 @@ jobs:
         with:
           name: pmd-report.sarif
           path: pmd-report.sarif
+      - name: cat sarif
+        run: |
+           cat pmd-report.sarif
   import:
     name: Conviso Findings Importation
-    needs: zap
+    needs: pmd-scan
     runs-on: ubuntu-20.04
     container:
       image: convisoappsec/conviso-flowcli
@@ -57,4 +60,5 @@ jobs:
 
       - name: SARIF Importation
         run: |
-          conviso findings import-sarif --input-file ./zap_report.sarif
+           cat pmd-report.sarif
+           conviso findings import-sarif --input-file ./zap_report.sarif
